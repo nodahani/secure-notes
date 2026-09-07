@@ -1,14 +1,28 @@
-def new_note(name_note):
+import os
+
+
+def create_note(name_note):
     with open("./notes/" + name_note + ".txt", "w") as file:
         file.write(input("Write...: "))
         return True
     return False
 
 
-def show_notes(name_note):
-    with open("./notes/" + name_note + ".txt", "r") as file:
-        return file.read()
-    return False
+def get_note_list():
+    files = os.listdir("notes")
+    list_note = []
+    for filename in files:
+        if filename.endswith(".txt"):
+            list_note.append(filename[:-4])
+    return list_note
+
+
+def display_note(note_names):
+    index = int(input("Index note... "))
+    for i, filename in enumerate(note_names, start=1):
+        if index == i:
+            with open("./notes/" + filename + ".txt", "r") as file:
+                return file.read()
 
 
 # UI
@@ -23,17 +37,20 @@ while True:
 
     if choise == "1":
         name_note = input("The name of the note is...: ")
-        if new_note(name_note):
+        if create_note(name_note):
             print(">> Note made. <<")
         else:
             print(">> Note not created. <<")
 
     if choise == "2":
-        name_note = input("I want to see the note...: ")
-        if show_notes(name_note):
-            print(f"...\n{show_notes(name_note)}\n...")
-        else:
-            print(">> Note not found. <<")
+        notes = get_note_list()
+        print("...")
+        for i, note_names in enumerate(notes, start=1):
+            print(f"{i}. {note_names}")
+        print("...")
+
+        selected_note = display_note(notes)
+        print(f"...\n{selected_note}\n...")
 
     if choise == "5":
         print("Goodbay!")
