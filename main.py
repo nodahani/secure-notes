@@ -1,30 +1,40 @@
 import os
 
 
-def create_note(name_note):
-    with open("./notes/" + name_note + ".txt", "w") as file:
+def create_note(note_name):
+    with open("./notes/" + note_name + ".txt", "w") as file:
         file.write(input("Write...: "))
         return True
     return False
 
 
-def get_note_list():
-    files = os.listdir("notes")
-    list_note = []
-    for fileName in files:
-        if fileName.endswith(".txt"):
-            list_note.append(fileName[:-4])
-    return list_note
+def get_list_notes():
+    # Getting the list
+    file_names = os.listdir("notes")
+    pure_names = []
+    for file_name in file_names:
+        if file_name.endswith(".txt"):
+            pure_names.append(file_name[:-4])
+    return pure_names
 
 
-def display_note(note_names):
-    index = int(input("Index note... "))
-    for i, fileName in enumerate(note_names, start=1):
-        if index == i:
-            with open("./notes/" + fileName + ".txt", "r") as file:
-                return file.read()
+def select_note(pure_names):
+    # Select a note
+    index = input("Selection index note: ")
+
+    try:
+        index = int(index)
+    except ValueError:
+        print("Value error")
+        return None
+
+    if index < 1 and index > len(pure_names):
+        return None
+
+    return pure_names[index - 1]
 
 
+# edit note
 def get_multiline_input(file):
     lines = []
     for count, line in enumerate(file, start=1):
@@ -39,20 +49,19 @@ def get_multiline_input(file):
     return lines
 
 
-def edit_note():
-    fileNames = get_note_list()
-    for i, fileName in enumerate(fileNames, start=1):
-        print(f"{i}. {fileName}")
+def edit_note(notes_name):
+    note_name = select_note(notes_name)
+    print(note_name)
+    with open("./notes/" + note_name + ".txt", "r") as file:
+        new_note = get_multiline_input(file)
 
-    index = int(input("Index note... "))
-    for i, fileName in enumerate(fileNames, start=1):
-        if index == i:
+    with open("./notes/" + note_name + ".txt", "w") as file:
+        file.writelines(new_note)
 
-            with open("./notes/" + fileName + ".txt", "r") as file:
-                new_note = get_multiline_input(file)
 
-            with open("./notes/" + fileName + ".txt", "w") as file:
-                file.writelines(new_note)
+def display_notes(notes_name):
+    for i, note_name in enumerate(notes_name, start=1):
+        print(f"''{i}. {note_name}''")
 
 
 # UI
@@ -65,26 +74,27 @@ while True:
 
     choise = input("What do you want to do...? ")
 
+    # Create note
     if choise == "1":
-        name_note = input("The name of the note is...: ")
-        if create_note(name_note):
+        note_name = input("The name of the note is...: ")
+        if create_note(note_name):
             print(">> Note made. <<")
         else:
             print(">> Note not created. <<")
 
+    # Display notes
     if choise == "2":
-        notes = get_note_list()
-        print("...")
-        for i, note_names in enumerate(notes, start=1):
-            print(f"{i}. {note_names}")
-        print("...")
+        notes_name = get_list_notes()
+        display_notes(notes_name)
 
-        selected_note = display_note(notes)
-        print(f"...\n{selected_note}\n...")
-
+    # Edit note
     if choise == "3":
-        print(edit_note())
+        notes_name = get_list_notes()
+        display_notes(notes_name)
 
+        edit_note(notes_name)
+
+    # Exit
     if choise == "5":
         print("Goodbay!")
         break
