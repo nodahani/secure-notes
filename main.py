@@ -64,6 +64,22 @@ def display_notes(notes_name):
         print(f"''{i}. {note_name}''")
 
 
+def delete_note(notes_name):
+    note_name = select_note(notes_name)
+    if note_name is None:
+        print("Invalid selection")
+        return
+
+    confirm = input(f"Delete {note_name}? (y/n): ")
+    if confirm.lower() != "y":
+        print("Cancelled")
+        return
+
+    path = "./notes/" + note_name + ".txt"
+    os.remove(path)
+    print("Note DELETED!")
+
+
 # UI
 while True:
     print("1. New Note Safe")
@@ -93,6 +109,11 @@ while True:
         display_notes(notes_name)
 
         edit_note(notes_name)
+
+    if choise == "4":
+        notes_name = get_list_notes()
+        display_notes(notes_name)
+        delete_note(notes_name)
 
     # Exit
     if choise == "5":
