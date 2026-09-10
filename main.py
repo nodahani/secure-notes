@@ -28,7 +28,7 @@ def select_note(pure_names):
         print("Value error")
         return None
 
-    if index < 1 and index > len(pure_names):
+    if index < 1 or index > len(pure_names):
         return None
 
     return pure_names[index - 1]
