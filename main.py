@@ -1,9 +1,18 @@
 import os
 
 
+def encrypt_text(text, shift):
+    result = ""
+    for char in text:
+        shift_char = (ord(char) - ord("a") + shift) % 26 + ord("a")
+        result += chr(shift_char)
+    return result
+
+
 def create_note(note_name):
     with open("./notes/" + note_name + ".txt", "w") as file:
-        file.write(input("Write...: "))
+        txt_input = input("Write...: ")
+        file.write(encrypt_text(txt_input, 3))
         return True
     return False
 
