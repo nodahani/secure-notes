@@ -68,9 +68,11 @@ def edit_note(notes_name):
         file.writelines(new_note)
 
 
-def display_notes(notes_name):
+def display_notes():
+    notes_name = get_list_notes()
     for i, note_name in enumerate(notes_name, start=1):
         print(f"''{i}. {note_name}''")
+    return notes_name
 
 
 def delete_note(notes_name):
@@ -109,19 +111,15 @@ while True:
 
     # Display notes
     if choise == "2":
-        notes_name = get_list_notes()
-        display_notes(notes_name)
+        display_notes()
 
     # Edit note
     if choise == "3":
-        notes_name = get_list_notes()
-        display_notes(notes_name)
-
+        notes_name = display_notes()
         edit_note(notes_name)
 
     if choise == "4":
-        notes_name = get_list_notes()
-        display_notes(notes_name)
+        notes_name = display_notes()
         delete_note(notes_name)
 
     # Exit
