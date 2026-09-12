@@ -4,8 +4,22 @@ import os
 def encrypt_text(text, shift):
     result = ""
     for char in text:
-        shift_char = (ord(char) - ord("a") + shift) % 26 + ord("a")
-        result += chr(shift_char)
+        if "a" <= char <= "z":
+            shift_char = (ord(char) - ord("a") + shift) % 26 + ord("a")
+            result += chr(shift_char)
+        else:
+            result += char
+    return result
+
+
+def decrypt_text(text, shift):
+    result = ""
+    for char in text:
+        if "a" <= char <= "z":
+            shift_char = (ord(char) - ord("a") - shift) % 26 + ord("a")
+            result += chr(shift_char)
+        else:
+            result += char
     return result
 
 
@@ -65,8 +79,7 @@ def get_multiline_input(file):
     return lines
 
 
-def edit_note(notes_name):
-    note_name = select_note(notes_name)
+def edit_note(note_name):
     print(note_name)
     with open("./notes/" + note_name + ".txt", "r") as file:
         new_note = get_multiline_input(file)
@@ -75,11 +88,15 @@ def edit_note(notes_name):
         file.writelines(new_note)
 
 
-def display_notes():
-    notes_name = get_list_notes()
+def display_note(notes_name):
+    result = ""
     for i, note_name in enumerate(notes_name, start=1):
         print(f"''{i}. {note_name}''")
-    return notes_name
+    with open("./notes/" + select_note(notes_name) + ".txt", "r") as file:
+        text = file.read()
+        result += decrypt_text(text, 3)
+
+    return result
 
 
 def delete_note(notes_name):
@@ -117,19 +134,30 @@ while True:
             print(">> This name is already taken. <<")
 
     # Display notes
-    if choise == "2":
-        display_notes()
+    elif choise == "2":
+        notes_name = get_list_notes()
+        result = display_note(notes_name)
+        print(f'"""\n{result}\n"""')
 
     # Edit note
-    if choise == "3":
-        notes_name = display_notes()
-        edit_note(notes_name)
+    elif choise == "3":
+        notes_name = get_list_notes()
+        for i, note_name in enumerate(notes_name, start=1):
+            print(f"''{i}. {note_name}''")
 
-    if choise == "4":
-        notes_name = display_notes()
+        note_name = select_note(notes_name)
+        edit_note(note_name)
+
+    elif choise == "4":
+        notes_name = get_list_notes()
+        for i, note_name in enumerate(notes_name, start=1):
+            print(f"''{i}. {note_name}''")
         delete_note(notes_name)
 
     # Exit
-    if choise == "5":
+    elif choise == "5":
         print("Goodbay!")
         break
+
+    else:
+        print(">> Please choose from the options. <<")
