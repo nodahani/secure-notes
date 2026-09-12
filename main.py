@@ -10,9 +10,16 @@ def encrypt_text(text, shift):
 
 
 def create_note(note_name):
-    with open("./notes/" + note_name + ".txt", "w") as file:
-        txt_input = input("Write...: ")
-        file.write(encrypt_text(txt_input, 3))
+    if note_name + ".txt" not in os.listdir("notes"):
+        with open("./notes/" + note_name + ".txt", "w") as file:
+            while True:
+                user_input = input(
+                    "Type and press Enter; leave empty and press Enter to finish: "
+                )
+                if user_input == "":
+                    break
+                else:
+                    file.write(encrypt_text(user_input, 3) + "\n")
         return True
     return False
 
@@ -105,9 +112,9 @@ while True:
     if choise == "1":
         note_name = input("The name of the note is...: ")
         if create_note(note_name):
-            print(">> Note made. <<")
+            print(">> Note successfully created. <<")
         else:
-            print(">> Note not created. <<")
+            print(">> This name is already taken. <<")
 
     # Display notes
     if choise == "2":
