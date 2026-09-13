@@ -93,15 +93,11 @@ def delete_file(file_name):
     Returns:
         None
     """
-    if file_name is None:
-        print("Invalid selection")
-        return
 
     confirm = input(f"Delete {file_name}? (y/n): ")
     if confirm.lower() != "y":
-        print("Cancelled")
-        return
-
-    path = "./data/" + file_name + ".txt"
-    os.remove(path)
-    print("Note DELETED!")
+        return False
+    else:
+        path = "./data/" + file_name + ".txt"
+        os.remove(path)
+        return True

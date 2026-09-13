@@ -18,7 +18,6 @@ def select_file(pure_names):
     try:
         index = int(index)
     except ValueError:
-        print("Value error")
         return None
 
     if index < 1 or index > len(pure_names):
@@ -40,10 +39,14 @@ def display_file(pure_names):
     result = ""
     for i, file_name in enumerate(pure_names, start=1):
         print(f"''{i}. {file_name}''")
-    with open("./data/" + select_file(pure_names) + ".txt", "r") as file:
-        text = file.read()
-        result += crypto.caesar_cipher(text, -3)
 
+    file = select_file(pure_names)
+    if file:
+        with open("./data/" + file + ".txt", "r") as file:
+            text = file.read()
+            result += crypto.caesar_cipher(text, -3)
+    else:
+        return False
     return result
 
 
@@ -68,7 +71,10 @@ while True:
     elif choise == "2":
         pure_names = get_list_files()
         result = display_file(pure_names)
-        print(f'"""\n{result}\n"""')
+        if result:
+            print(f'"""\n{result}\n"""')
+        else:
+            print(">> Please choose from the options. <<")
 
     # Edit note
     elif choise == "3":
@@ -85,7 +91,14 @@ while True:
         for i, file_name in enumerate(pure_names, start=1):
             print(f"''{i}. {file_name}''")
         file_name = select_file(pure_names)
-        delete_file(file_name)
+        if file_name:
+            if delete_file(file_name):
+                print("Note DELETED!")
+            else:
+                print("Cancelled")
+
+        else:
+            print(">> Please choose from the options. <<")
 
     # Exit
     elif choise == "5":
