@@ -19,7 +19,7 @@ def create_file():
                 if user_input == "":
                     break
                 else:
-                    file.write(crypto.encrypt_text(user_input, 3) + "\n")
+                    file.write(crypto.caesar_cipher(user_input, 3) + "\n")
         return True
     return False
 
@@ -76,12 +76,12 @@ def edit_file(file_name):
     with open("./data/" + file_name + ".txt", "r") as file:
         text = file.read()
         print(text)
-        result = crypto.decrypt_text(text, 3)
+        result = crypto.caesar_cipher(text, -3)
         print(result)
         final_file = get_multiline_input(result)
 
     with open("./data/" + file_name + ".txt", "w") as file:
-        file.writelines(crypto.encrypt_text(final_file, 3))
+        file.writelines(crypto.caesar_cipher(final_file, 3))
 
 
 def delete_file(file_name):

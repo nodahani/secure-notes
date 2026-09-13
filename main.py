@@ -42,7 +42,7 @@ def display_file(pure_names):
         print(f"''{i}. {file_name}''")
     with open("./data/" + select_file(pure_names) + ".txt", "r") as file:
         text = file.read()
-        result += crypto.decrypt_text(text, 3)
+        result += crypto.caesar_cipher(text, -3)
 
     return result
 
