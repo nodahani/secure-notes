@@ -78,12 +78,18 @@ while True:
 
     # Edit note
     elif choise == "3":
+
         pure_names = get_list_files()
         for i, file_name in enumerate(pure_names, start=1):
             print(f"''{i}. {file_name}''")
 
         file_name = select_file(pure_names)
-        edit_file(file_name)
+        print(f"Selected file: {file_name}")
+
+        if edit_file(file_name):
+            print(">> Note successfully edited. <<")
+        else:
+            print(">> Note edit failed. <<")
 
     # Delete note
     elif choise == "4":

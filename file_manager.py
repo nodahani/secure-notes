@@ -39,26 +39,25 @@ def get_list_files():
     return pure_names
 
 
-def get_multiline_input(file):
-    """Read a file line by line and let the user edit each line.
+def get_multiline_input(lines):
+    """Edit import file lines
 
     Args:
-        file (file object): An open file object to read from.
-    Returns:
-        list: A list of lines (with newline characters) after editing.
+        lines (list): list of lines
 
+    Returns:
+        list: List of edited lines
     """
 
-    lines = []
-    for count, line in enumerate(file, start=1):
-        print(f"{count}. {line}")
-
-        edit_line_file = input("If you want to edit, type, otherwise press Enter... :")
-        if edit_line_file != "":
-            lines.append(edit_line_file + "\n")
+    edit_lines = []
+    for line in lines:
+        print(line)
+        user_input = input("Type to edit, or press Enter to dismiss:\n")
+        if user_input != "":
+            edit_lines.append(user_input)
         else:
-            lines.append(line)
-    return lines
+            edit_lines.append(line)
+    return edit_lines
 
 
 def edit_file(file_name):
@@ -68,20 +67,15 @@ def edit_file(file_name):
         file_name (str): The name of the file to edit.
 
     Returns:
-        None
-
+        True
     """
-
-    print(file_name)
     with open("./data/" + file_name + ".txt", "r") as file:
-        text = file.read()
-        print(text)
-        result = crypto.caesar_cipher(text, -3)
-        print(result)
-        final_file = get_multiline_input(result)
+        lines = crypto.caesar_cipher(file.read(), -3).splitlines()
+        content = "\n".join(get_multiline_input(lines))
 
     with open("./data/" + file_name + ".txt", "w") as file:
-        file.writelines(crypto.caesar_cipher(final_file, 3))
+        file.write(crypto.caesar_cipher(content, 3))
+        return True
 
 
 def delete_file(file_name):
