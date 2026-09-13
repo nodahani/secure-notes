@@ -1,12 +1,20 @@
 import crypto
+from file_manager import delete_file, edit_file, create_file, get_list_files
 
-from note_manager import delete_note, edit_note, create_note, get_list_notes
 
+def select_file(pure_names):
+    """It takes a number from the user and returns that file.
 
-def select_note(pure_names):
-    # Select a note
+    Args:
+        pure_name (list): List of file titles.
+
+    Returns:
+        str: Name of the selected file.
+        None: If the input non-numeric or out of range.
+
+    """
+
     index = input("Selection index note: ")
-
     try:
         index = int(index)
     except ValueError:
@@ -19,11 +27,20 @@ def select_note(pure_names):
     return pure_names[index - 1]
 
 
-def display_note(notes_name):
+def display_file(pure_names):
+    """Display file titles and the content of the selected file.
+
+    Args:
+        pure_name (list): List of file titles.
+
+    Returns:
+        str: The decrypted content of the selected file.
+    """
+
     result = ""
-    for i, note_name in enumerate(notes_name, start=1):
-        print(f"''{i}. {note_name}''")
-    with open("./data/" + select_note(notes_name) + ".txt", "r") as file:
+    for i, file_name in enumerate(pure_names, start=1):
+        print(f"''{i}. {file_name}''")
+    with open("./data/" + select_file(pure_names) + ".txt", "r") as file:
         text = file.read()
         result += crypto.decrypt_text(text, 3)
 
@@ -42,33 +59,33 @@ while True:
 
     # Create note
     if choise == "1":
-        note_name = input("The name of the note is...: ")
-        if create_note(note_name):
+        if create_file():
             print(">> Note successfully created. <<")
         else:
             print(">> This name is already taken. <<")
 
     # Display notes
     elif choise == "2":
-        notes_name = get_list_notes()
-        result = display_note(notes_name)
+        pure_names = get_list_files()
+        result = display_file(pure_names)
         print(f'"""\n{result}\n"""')
 
     # Edit note
     elif choise == "3":
-        notes_name = get_list_notes()
-        for i, note_name in enumerate(notes_name, start=1):
-            print(f"''{i}. {note_name}''")
+        pure_names = get_list_files()
+        for i, file_name in enumerate(pure_names, start=1):
+            print(f"''{i}. {file_name}''")
 
-        note_name = select_note(notes_name)
-        edit_note(note_name)
+        file_name = select_file(pure_names)
+        edit_file(file_name)
 
+    # Delete note
     elif choise == "4":
-        notes_name = get_list_notes()
-        for i, note_name in enumerate(notes_name, start=1):
-            print(f"''{i}. {note_name}''")
-        note_name = select_note(notes_name)
-        delete_note(note_name)
+        pure_names = get_list_files()
+        for i, file_name in enumerate(pure_names, start=1):
+            print(f"''{i}. {file_name}''")
+        file_name = select_file(pure_names)
+        delete_file(file_name)
 
     # Exit
     elif choise == "5":
