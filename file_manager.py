@@ -1,27 +1,13 @@
 import os
 import crypto
+import constants
 
 
-def create_file():
-    """Create an encrypted file.
-
-    Returns:
-        bool: True if the file was create, False if a file with the sam name already exist.
-    """
-    file_name = input("The name of the note is...: ")
-
-    if file_name + ".txt" not in os.listdir("data"):
-        with open("./data/" + file_name + ".txt", "w") as file:
-            while True:
-                user_input = input(
-                    "Type and press Enter; leave empty and press Enter to finish: "
-                )
-                if user_input == "":
-                    break
-                else:
-                    file.write(crypto.caesar_cipher(user_input, 3) + "\n")
+def file_exist(stem):
+    if stem + ".txt" in os.listdir("./data"):
         return True
-    return False
+    else:
+        return False
 
 
 def get_list_files():
@@ -39,59 +25,14 @@ def get_list_files():
     return pure_names
 
 
-def get_multiline_input(lines):
-    """Edit import file lines
+def save_encrypted_file(stem, input_result):
+    """Writing encrypted text to a file"""
 
-    Args:
-        lines (list): list of lines
-
-    Returns:
-        list: List of edited lines
-    """
-
-    edit_lines = []
-    for line in lines:
-        print(line)
-        user_input = input("Type to edit, or press Enter to dismiss:\n")
-        if user_input != "":
-            edit_lines.append(user_input)
-        else:
-            edit_lines.append(line)
-    return edit_lines
-
-
-def edit_file(file_name):
-    """Edit the file.
-
-    Args:
-        file_name (str): The name of the file to edit.
-
-    Returns:
-        True
-    """
-    with open("./data/" + file_name + ".txt", "r") as file:
-        lines = crypto.caesar_cipher(file.read(), -3).splitlines()
-        content = "\n".join(get_multiline_input(lines))
-
-    with open("./data/" + file_name + ".txt", "w") as file:
-        file.write(crypto.caesar_cipher(content, 3))
-        return True
-
-
-def delete_file(file_name):
-    """Delete file.
-
-    Args:
-        file_name (str): The name of the file to delete.
-
-    Returns:
-        None
-    """
-
-    confirm = input(f"Delete {file_name}? (y/n): ")
-    if confirm.lower() != "y":
-        return False
+    lines, status = input_result
+    if status == constants.STATUS_SAVE:
+        with open("./data/" + stem + ".txt", "w") as file:
+            text = "\n".join(lines)
+            file.write(crypto.caesar_cipher(text, 3))
+            return status
     else:
-        path = "./data/" + file_name + ".txt"
-        os.remove(path)
-        return True
+        return status
