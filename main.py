@@ -22,6 +22,7 @@ while True:
             print("** You have returned to the previous menu. **")
         elif state == constants.STATUS_EXIT:
             print("** You are out. **")
+            break
         elif state == constants.EMPTY_INPUT:
             print("** You cannot leave the input blank! **")
         else:
