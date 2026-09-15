@@ -1,4 +1,4 @@
-from app import create_file
+from app import create_file, display_file
 import constants
 
 # UI
@@ -11,7 +11,7 @@ while True:
 
     choise = input("What do you want to do...? ")
 
-    # Create note
+    # Create file
     if choise == "1":
         state = create_file()
         if state == constants.STATUS_SAVE:
@@ -28,14 +28,22 @@ while True:
         else:
             print(f"** Unexpected status: {state} **")
 
-    # # Display notes
-    # elif choise == "2":
-    #     pure_names = get_list_files()
-    #     result = display_file(pure_names)
-    #     if result:
-    #         print(f'"""\n{result}\n"""')
-    #     else:
-    #         print(">> Please choose from the options. <<")
+    # Display files
+    elif choise == "2":
+        state = display_file()
+        if state == constants.STATUS_OK:
+            pass
+        elif state == constants.STATUS_BACK:
+            print("** You have returned to the previous menu. **")
+        elif state == constants.STATUS_EXIT:
+            print("** You are out. **")
+            break
+        elif state == constants.EMPTY_INPUT:
+            print("** You cannot leave the input blank! **")
+        elif state == constants.NOT_NUMBER:
+            print("** Please enter a valid number. **")
+        elif state == constants.INVALID_INPUT:
+            print("** Your choice is not in the list **")
 
     # # Edit note
     # elif choise == "3":

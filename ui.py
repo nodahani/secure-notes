@@ -1,4 +1,5 @@
 import constants
+from file_manager import get_list_files
 
 
 def get_user_lines(message):
@@ -29,26 +30,30 @@ def getting_input_user(message):
         return user_input
 
 
+def format_file_list(files):
+    """Return a numbered list of files as a single string."""
+    return "\n".join(f"{i}. {f}" for i, f in enumerate(files, start=1))
+
+
 def select_file(pure_names, message):
-    """It takes a number from the user and returns that file.
+    """It takes a number from the user and returns that file."""
 
-    Args:
-        pure_name (list): List of file titles.
+    user_input = getting_input_user(message)
 
-    Returns:
-        str: Name of the selected file.
-        None: If the input non-numeric or out of range.
+    if user_input == constants.STATUS_BACK:
+        return constants.STATUS_BACK
+    elif user_input == constants.STATUS_EXIT:
+        return constants.STATUS_EXIT
+    elif user_input == constants.EMPTY_INPUT:
+        return constants.EMPTY_INPUT
+    else:
+        try:
+            index = int(user_input)
+        except ValueError:
+            return constants.NOT_NUMBER
 
-    """
-
-    index = input(message)
-    try:
-        index = int(index)
-    except ValueError:
-        return None
-
-    if index < 1 or index > len(pure_names):
-        return None
+        if index < 1 or index > len(pure_names):
+            return constants.INVALID_INPUT
 
     return pure_names[index - 1]
 

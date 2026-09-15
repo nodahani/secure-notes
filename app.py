@@ -1,7 +1,7 @@
 import crypto
 import constants
-from ui import getting_input_user, get_user_lines
-from file_manager import file_exist, save_encrypted_file
+from ui import getting_input_user, get_user_lines, format_file_list, select_file
+from file_manager import file_exist, save_encrypted_file, get_list_files
 
 
 def create_file():
@@ -26,6 +26,37 @@ def create_file():
     else:
         return constants.EMPTY_INPUT
 
+
+def display_file():
+    """Display file titles and the content of the selected file."""
+
+    result = ""
+    file_names = get_list_files()
+    print(format_file_list(file_names))
+
+    selected = select_file(
+        file_names,
+        "Which file do you want to see? Select by number, or type 'back' to return, or 'exit' to quit: ",
+    )
+    if selected == constants.STATUS_BACK:
+        return constants.STATUS_BACK
+    elif selected == constants.STATUS_EXIT:
+        return constants.STATUS_EXIT
+    elif selected == constants.EMPTY_INPUT:
+        return constants.EMPTY_INPUT
+    elif selected == constants.NOT_NUMBER:
+        return constants.NOT_NUMBER
+    elif selected == constants.INVALID_INPUT:
+        return constants.INVALID_INPUT
+    else:
+        with open("./data/" + selected + ".txt", "r") as file:
+            text = file.read()
+            result += crypto.caesar_cipher(text, -constants.CIPHER_SHIFT)
+        print(f"***\n{result}\n***")
+        return constants.STATUS_OK
+
+
+# display_file()
 
 # def edit_file(file_name):
 #     """Edit the file.
@@ -62,27 +93,3 @@ def create_file():
 #         path = "./data/" + file_name + ".txt"
 #         os.remove(path)
 #         return True
-
-
-# def display_file(pure_names):
-#     """Display file titles and the content of the selected file.
-
-#     Args:
-#         pure_name (list): List of file titles.
-
-#     Returns:
-#         str: The decrypted content of the selected file.
-#     """
-
-#     result = ""
-#     for i, file_name in enumerate(pure_names, start=1):
-#         print(f"''{i}. {file_name}''")
-
-#     file = select_file(pure_names)
-#     if file:
-#         with open("./data/" + file + ".txt", "r") as file:
-#             text = file.read()
-#             result += crypto.caesar_cipher(text, -3)
-#     else:
-#         return False
-#     return result

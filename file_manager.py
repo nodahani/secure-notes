@@ -11,11 +11,7 @@ def file_exist(stem):
 
 
 def get_list_files():
-    """Get list of files
-
-    Returns:
-        list: A list of file names (strings)
-    """
+    """Get list of files"""
 
     file_names = os.listdir("data")
     pure_names = []
