@@ -32,7 +32,7 @@ def save_encrypted_file(stem, input_result):
     if status == constants.STATUS_SAVE:
         with open("./data/" + stem + ".txt", "w") as file:
             text = "\n".join(lines)
-            file.write(crypto.caesar_cipher(text, 3))
+            file.write(crypto.caesar_cipher(text, constants.CIPHER_SHIFT))
             return status
     else:
         return status
