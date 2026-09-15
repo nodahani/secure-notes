@@ -14,14 +14,18 @@ while True:
     # Create note
     if choise == "1":
         state = create_file()
-        if state == constants.DUPLICATE_NAME:
+        if state == constants.STATUS_SAVE:
+            print("** file saved successfully. **")
+        elif state == constants.DUPLICATE_NAME:
             print("** This name already exists. **")
         elif state == constants.STATUS_BACK:
             print("** You have returned to the previous menu. **")
         elif state == constants.STATUS_EXIT:
             print("** You are out. **")
-        else:
+        elif state == constants.EMPTY_INPUT:
             print("** You cannot leave the input blank! **")
+        else:
+            print(f"** Unexpected status: {state} **")
 
     # # Display notes
     # elif choise == "2":
